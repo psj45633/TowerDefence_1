@@ -4,17 +4,17 @@ using UnityEngine;
 public class EnemyStats : MonoBehaviour
 {
     public event Action OnDied;
-    public int hp;
+    public int curHP;
 
     public void Init(int maxHp)
     {
-        hp = maxHp;
+        curHP = maxHp;
     }
 
     public void TakeDamage(int dmg)
     {
-        hp -= dmg;
-        if(hp <= 0)
+        curHP -= dmg;
+        if(curHP <= 0)
         {
             OnDied?.Invoke();
         }

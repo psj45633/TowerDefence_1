@@ -6,7 +6,6 @@ public class EnemySO : ScriptableObject
 {
     public int stageIndex;
 
-    public int hp;
     public int MaxHp;
     public float baseMoveSpeed = 1f;
 

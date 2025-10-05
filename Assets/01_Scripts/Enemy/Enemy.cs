@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System;
 
-public enum EnemyOutcome { Killed, Escaped }
+public enum EnemyOutcome { Died, Escaped }
 
 public class Enemy : MonoBehaviour
 {
-    public static event Action<Enemy, EnemyOutcome> OnFinished;
+    public static event Action<Enemy, EnemyOutcome> OnEnemyRemoved;
 
     private ObjectPool pool;
     private EnemyStats enemyStats;
@@ -24,20 +24,20 @@ public class Enemy : MonoBehaviour
         enemyStats.OnDied -= OnKilled;
 
         enemyStats.Init(data.MaxHp);
-        Debug.Log(enemyStats.hp);
+        Debug.Log(enemyStats.curHP);
 
         enemyStats.OnDied += OnKilled;
     }
     
     public void OnEscaped()
     {
-        OnFinished?.Invoke(this, EnemyOutcome.Escaped);
+        OnEnemyRemoved?.Invoke(this, EnemyOutcome.Escaped);
         Despawn();
     }
 
     public void OnKilled()
     {
-        OnFinished?.Invoke(this, EnemyOutcome.Killed);
+        OnEnemyRemoved?.Invoke(this, EnemyOutcome.Died);
         Despawn();
     }
 
