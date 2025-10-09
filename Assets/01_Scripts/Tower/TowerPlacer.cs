@@ -23,7 +23,9 @@ public class TowerPlacer : MonoBehaviour
             if (previewObj == null)
             {
                 previewObj = Instantiate(towerPrefab);
-                previewRenderer = previewObj.GetComponent<SpriteRenderer>();
+                foreach(var col in previewObj.GetComponentsInChildren<Collider2D>()) Destroy(col);
+
+                previewRenderer = previewObj.GetComponentInChildren<SpriteRenderer>();
                 if (previewRenderer != null)
                     previewRenderer.color = new Color(0f, 1f, 0f, 0.5f);
 
@@ -35,13 +37,22 @@ public class TowerPlacer : MonoBehaviour
                 Destroy(previewObj);
         }
     }
-    public void SetTowerPrefab(GameObject prefab) => towerPrefab = prefab;
+    public void SetTowerPrefab(GameObject prefab)
+    {
+        towerPrefab = prefab;
+
+        if (buildMode)
+        {
+            SetBuildMode(false);
+            SetBuildMode(true);
+        }
+    }
 
     private void Update()
     {
         if (!buildMode || towerPrefab == null) return;
 
-        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         mouseWorld.z = 0;
         Vector3Int cell = buildableMap.WorldToCell(mouseWorld);
         Vector3 cellCenter = buildableMap.GetCellCenterWorld(cell);
@@ -54,7 +65,7 @@ public class TowerPlacer : MonoBehaviour
         if (!isOverBoard) return;
 
 
-        bool canBuild = buildableMap.HasTile(cell) && !occupied.Contains(cell);
+        bool canBuild = !occupied.Contains(cell);
 
         if (previewObj != null)
         {

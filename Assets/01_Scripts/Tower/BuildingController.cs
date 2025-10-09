@@ -33,7 +33,7 @@ public class BuildingController : MonoBehaviour
 
     void CancelBuild()
     {
-        selectedIndex--;
+        selectedIndex = -1;
         placer.SetBuildMode(false);
         Debug.Log("Build canceled");
     }
