@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Stage2
   m_EditorClassIdentifier: 
   stageIndex: 0
-  hp: 0
   MaxHp: 110
   baseMoveSpeed: 1
   rewardGold: 1
   sprite: {fileID: 0}
-  tintColor: {r: 1, g: 1, b: 1, a: 1}
+  tintColor: {r: 0.9150943, g: 0.56545925, b: 0.56545925, a: 1}

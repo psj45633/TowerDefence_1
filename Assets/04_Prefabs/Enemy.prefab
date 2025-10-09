@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  targetPosition: {x: 10, y: -3, z: 0}
+  targetPosition: {x: 6, y: -11, z: 0}
 --- !u!114 &7160814381982064940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,7 +132,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 192e59a2d3623ad47b7f71d79c02e0a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawner: {fileID: 0}
 --- !u!50 &-316098515702951930
 Rigidbody2D:
   serializedVersion: 5
@@ -172,6 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e862627101017844b1fe5fc513e80d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curHP: 0
 --- !u!1 &8820184805610456849
 GameObject:
   m_ObjectHideFlags: 0
