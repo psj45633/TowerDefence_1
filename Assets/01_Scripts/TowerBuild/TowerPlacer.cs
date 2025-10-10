@@ -8,10 +8,17 @@ public class TowerPlacer : MonoBehaviour
     public Tilemap buildableMap;
     public Transform towerParent;
 
+    [Header("Preview Indicator")]
+    public Sprite indicatorSprite;
+    private float indicatorAlpha = 0.25f;
+    private int indicatorSortingOffset = -10;
+    private GameObject indicatorObj;
+    private SpriteRenderer indicatorRenderer;
+
+
     private bool buildMode = false;
     private GameObject towerPrefab;
     private GameObject previewObj;
-    private SpriteRenderer previewRenderer;
     private HashSet<Vector3Int> occupied = new HashSet<Vector3Int>();
 
     public void SetBuildMode(bool active)
@@ -25,16 +32,17 @@ public class TowerPlacer : MonoBehaviour
                 previewObj = Instantiate(towerPrefab);
                 foreach(var col in previewObj.GetComponentsInChildren<Collider2D>()) Destroy(col);
 
-                previewRenderer = previewObj.GetComponentInChildren<SpriteRenderer>();
-                if (previewRenderer != null)
-                    previewRenderer.color = new Color(0f, 1f, 0f, 0.5f);
-
+                indicatorObj = new GameObject("BuildIndicator");
+                indicatorObj.transform.SetParent(previewObj.transform, false);
+                indicatorRenderer = indicatorObj.AddComponent<SpriteRenderer>();
+                indicatorRenderer.sprite = indicatorSprite;
+                indicatorRenderer.color = new Color(0f, 1f, 0f, indicatorAlpha);
+                indicatorRenderer.sortingOrder = indicatorSortingOffset;
             }
         }
         else
         {
-            if (previewObj != null)
-                Destroy(previewObj);
+            CleanupPreview();
         }
     }
     public void SetTowerPrefab(GameObject prefab)
@@ -47,6 +55,17 @@ public class TowerPlacer : MonoBehaviour
             SetBuildMode(true);
         }
     }
+
+    void CleanupPreview()
+    {
+        if (indicatorObj) Destroy(indicatorObj);
+        indicatorObj = null; indicatorRenderer = null;
+
+        if (previewObj) Destroy(previewObj);
+        previewObj = null; 
+    }
+
+
 
     private void Update()
     {
@@ -71,9 +90,9 @@ public class TowerPlacer : MonoBehaviour
         {
             previewObj.transform.position = cellCenter;
 
-            if (previewRenderer != null)
+            if (indicatorRenderer != null)
             {
-                previewRenderer.color = canBuild ? new Color(0f, 1f, 0f, 0.5f) : new Color(1f, 0f, 0f, 0.5f);
+                indicatorRenderer.color = canBuild ? new Color(0f, 1f, 0f, indicatorAlpha) : new Color(1f, 0f, 0f, indicatorAlpha);
             }
         }
 
@@ -81,6 +100,8 @@ public class TowerPlacer : MonoBehaviour
         {
             Instantiate(towerPrefab, cellCenter, Quaternion.identity, towerParent);
             occupied.Add(cell);
+            CleanupPreview();
+            buildMode = false;
         }
     }
 }
