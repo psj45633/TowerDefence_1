@@ -11,6 +11,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int spawnCount = 30;
     [SerializeField] private float spawnInterval = 1f;
     [SerializeField] private int currentStage = 0;
+    
+    
+    public int spawnIndex = 1;
 
     private float timer;
     private int spawnedEnemy;
@@ -64,6 +67,7 @@ public class EnemySpawner : MonoBehaviour
         enemy.Init(data);
 
         spawnedEnemy++;
+        spawnIndex++;
 
         //var dt = Time.time - lastSpawnTime;
         //lastSpawnTime = Time.time;

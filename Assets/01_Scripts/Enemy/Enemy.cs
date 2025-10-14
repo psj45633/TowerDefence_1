@@ -24,7 +24,6 @@ public class Enemy : MonoBehaviour
         enemyStats.OnDied -= OnKilled;
 
         enemyStats.Init(data.MaxHp);
-        Debug.Log(enemyStats.curHP);
 
         enemyStats.OnDied += OnKilled;
     }
