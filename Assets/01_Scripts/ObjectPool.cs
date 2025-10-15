@@ -4,12 +4,12 @@ using UnityEngine;
 public class ObjectPool : MonoBehaviour
 {
     public GameObject prefab;
-    public int enemyInitialSize = 30;
+    public int InitialSize = 30;
     private Queue<GameObject> pool = new Queue<GameObject>();
 
     private void Awake()
     {
-        for (int i = 0; i < enemyInitialSize; i++)
+        for (int i = 0; i < InitialSize; i++)
         {
             GameObject obj = Instantiate(prefab);
             obj.SetActive(false);

@@ -8,7 +8,7 @@ public class Tower : MonoBehaviour
     private float fireRate;
 
     ITowerAttack attack;
-    TowerTargeter targeter;
+    public TowerTargeter targeter;
 
 
     void Awake()

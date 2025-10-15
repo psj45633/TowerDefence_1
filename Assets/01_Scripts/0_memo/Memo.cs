@@ -4,8 +4,18 @@ public class Memo : MonoBehaviour
 {
     /*
     
-    10/15 - Attack System - ProjectileAttack 함수
+    Attack System
+    10/15 - AimToTarget
+    10/17 - ProjectileAttack
 
+    
+    
+    
+    Attack Judgement
+        
+    Enemy - NavMeshAgent road research
+
+    GameManager - GetGold, Stage
 
 
 

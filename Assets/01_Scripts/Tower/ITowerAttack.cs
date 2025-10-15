@@ -4,5 +4,4 @@
     void Apply(TowerInfoSO data);
     bool CanFire(Enemy target);
     void Attack(Enemy target);
-    void Tick(float dt);
 }

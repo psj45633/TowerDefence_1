@@ -4569,6 +4569,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &778877049 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5783281861797584780, guid: 270fb972dd7173c40a5d4f64cd6c8b2d, type: 3}
+  m_PrefabInstance: {fileID: 8625277916517671070}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &802864883
 GameObject:
   m_ObjectHideFlags: 0
@@ -5675,7 +5680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 3707666785217419727, guid: c911c95a65208c54d9b338773cb8ec01, type: 3}
-  enemyInitialSize: 30
+  InitialSize: 30
 --- !u!4 &1081095043
 Transform:
   m_ObjectHideFlags: 0
@@ -7541,10 +7546,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2977108498761880723, guid: 270fb972dd7173c40a5d4f64cd6c8b2d, type: 3}
-      propertyPath: towerData
+    - target: {fileID: 1730623239247253958, guid: 270fb972dd7173c40a5d4f64cd6c8b2d, type: 3}
+      propertyPath: firePoint
       value: 
-      objectReference: {fileID: 11400000, guid: 88ddd87b653b3ba4590009648b742e68, type: 2}
+      objectReference: {fileID: 778877049}
     - target: {fileID: 3355823287577141722, guid: 270fb972dd7173c40a5d4f64cd6c8b2d, type: 3}
       propertyPath: m_Name
       value: WhiteTower_1
