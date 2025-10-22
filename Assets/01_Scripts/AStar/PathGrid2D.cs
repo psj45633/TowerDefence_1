@@ -42,8 +42,10 @@ public class PathGrid2D : MonoBehaviour
             for (int y = 0; y < size.y; y++)
             {
                 Vector3 c = CellCenterWorld(new Vector2Int(x, y));
-                int n = Physics2D.OverlapBoxNonAlloc(c, box, 0f, buf, blockMask);
-                walkable[x, y] = (n == 0);
+                //int n = Physics2D.OverlapBoxNonAlloc(c, box, 0f, buf, blockMask);
+                //walkable[x, y] = (n == 0);
+                bool empty = (Physics2D.OverlapBox(c, box, 0f, blockMask) == null);
+                walkable[x, y] = empty;
             }
 
         }
@@ -51,19 +53,24 @@ public class PathGrid2D : MonoBehaviour
         OnGridChanged?.Invoke();
     }
 
+    Vector2 BoxSizeForAgent() => new Vector2(
+             Mathf.Max(0.01f, cellSize.x - agentRadius * 2f),
+             Mathf.Max(0.01f, cellSize.y - agentRadius * 2f)
+             ) * boxScale;
+
     // 단일 셀 갱신
     public void RefreshCellAtWorld(Vector3 worldPos)
     {
         var c = WorldToCell(worldPos);
         if (!InBounds(c)) return;
 
-        Vector2 box = new Vector2(
-            Mathf.Max(0.01f, cellSize.x - agentRadius * 2f),
-            Mathf.Max(0.01f, cellSize.y - agentRadius * 2f)
-            ) * boxScale;
+        Vector2 box = BoxSizeForAgent();
 
-        int n = Physics2D.OverlapBoxNonAlloc(CellCenterWorld(c), box, 0f, buf, blockMask);
-        walkable[c.x, c.y] = (n == 0);
+
+        //int n = Physics2D.OverlapBoxNonAlloc(CellCenterWorld(c), box, 0f, buf, blockMask);
+        //walkable[c.x, c.y] = (n == 0);
+        bool empty = (Physics2D.OverlapBox(CellCenterWorld(c), box, 0f, blockMask) == null);
+        walkable[c.x, c.y] = empty;
         OnGridChanged?.Invoke();
     }
 
@@ -77,18 +84,16 @@ public class PathGrid2D : MonoBehaviour
         var cMin = WorldToCell(min);
         var cMax = WorldToCell(max);
 
-        Vector2 box = new Vector2(
-            Mathf.Max(0.01f, cellSize.x - agentRadius * 2f),
-            Mathf.Max(0.01f, cellSize.y - agentRadius * 2f)
-            ) * boxScale;
+        Vector2 box = BoxSizeForAgent();
 
         for (int x = Mathf.Min(cMin.x, cMax.x); x <= Mathf.Max(cMin.x, cMax.x); x++)
             for (int y = Mathf.Min(cMin.y, cMax.y); y <= Mathf.Max(cMin.y, cMax.y); y++)
             {
                 var c = new Vector2Int(x, y);
                 if (!InBounds(c)) continue;
-                int n = Physics2D.OverlapBoxNonAlloc(CellCenterWorld(c), box, 0f, buf, blockMask);
-                walkable[x, y] = (n == 0);
+                //int n = Physics2D.OverlapBoxNonAlloc(CellCenterWorld(c), box, 0f, buf, blockMask);
+                bool empty = (Physics2D.OverlapBox(CellCenterWorld(c), box, 0f, blockMask) == null);
+                walkable[c.x, c.y] = empty;
             }
 
         OnGridChanged?.Invoke();
