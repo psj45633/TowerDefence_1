@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using UnityEngine.AI;
 
 public enum EnemyOutcome { Died, Escaped }
 
@@ -9,6 +10,7 @@ public class Enemy : MonoBehaviour
 
     private ObjectPool pool;
     private EnemyStats enemyStats;
+    public EnemySO def;
 
     private void Awake()
     {
@@ -19,11 +21,13 @@ public class Enemy : MonoBehaviour
 
     public void Init(EnemySO data)
     {
-        if(!enemyStats) enemyStats = GetComponent<EnemyStats>();
+        def = data;
+
+        if (!enemyStats) enemyStats = GetComponent<EnemyStats>();
 
         enemyStats.OnDied -= OnKilled;
 
-        enemyStats.Init(data.MaxHp);
+        enemyStats.Init(data.MaxHp, data.baseMoveSpeed);
 
         enemyStats.OnDied += OnKilled;
     }
@@ -50,6 +54,15 @@ public class Enemy : MonoBehaviour
         if (other.CompareTag("Target"))
         {
             OnEscaped();
+        }
+        else if (other.CompareTag("Attack"))
+        {
+            Tower tower = other.GetComponentInParent<Tower>();
+            
+            int towerLv = tower.currentLevelIndex;
+            int towerDamage = tower.towerData.levels[towerLv].damage;
+            enemyStats.TakeDamage(towerDamage);
+
         }
     }
 }

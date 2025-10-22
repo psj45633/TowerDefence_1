@@ -4,6 +4,7 @@ using UnityEngine;
 public class ObjectPool : MonoBehaviour
 {
     public GameObject prefab;
+    public Transform parent;
     public int InitialSize = 30;
     private Queue<GameObject> pool = new Queue<GameObject>();
 
@@ -11,7 +12,7 @@ public class ObjectPool : MonoBehaviour
     {
         for (int i = 0; i < InitialSize; i++)
         {
-            GameObject obj = Instantiate(prefab);
+            GameObject obj = Instantiate(prefab, parent);
             obj.SetActive(false);
             pool.Enqueue(obj);
         }

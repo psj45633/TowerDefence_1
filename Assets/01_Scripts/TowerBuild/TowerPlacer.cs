@@ -7,6 +7,7 @@ public class TowerPlacer : MonoBehaviour
 {
     public Tilemap buildableMap;
     public Transform towerParent;
+    public PathGrid2D grid;
 
     [Header("Preview Indicator")]
     public Sprite indicatorSprite;
@@ -98,8 +99,32 @@ public class TowerPlacer : MonoBehaviour
 
         if (Mouse.current.leftButton.wasReleasedThisFrame && canBuild)
         {
-            Instantiate(towerPrefab, cellCenter, Quaternion.identity, towerParent);
+            //Instantiate(towerPrefab, cellCenter, Quaternion.identity, towerParent);
+            //occupied.Add(cell);
+            //CleanupPreview();
+            //buildMode = false;
+
+            var inst = Instantiate(towerPrefab, cellCenter, Quaternion.identity, towerParent);
             occupied.Add(cell);
+
+            // 새로 놓은 타워 콜라이더가 덮는 모든 셀을 갱신
+            if (grid && inst)
+            {
+                var cols = inst.GetComponentsInChildren<Collider2D>();
+                if (cols != null && cols.Length > 0)
+                {
+                    var total = cols[0].bounds;
+                    for (int i = 1; i < cols.Length; i++) total.Encapsulate(cols[i].bounds);
+                    grid.RefreshCellsByBounds(total);  // 다셀 갱신
+                }
+                else
+                {
+                    grid.RefreshCellAtWorld(cellCenter); // (콜라이더가 한 칸이면 대안)
+                }
+
+                grid.ForceRepathAll(); // 모든 에이전트 즉시 리패스
+            }
+
             CleanupPreview();
             buildMode = false;
         }

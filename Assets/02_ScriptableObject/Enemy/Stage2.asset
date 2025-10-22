@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageIndex: 0
   MaxHp: 110
-  baseMoveSpeed: 1
+  baseMoveSpeed: 3
   rewardGold: 1
   sprite: {fileID: 0}
   tintColor: {r: 0.9150943, g: 0.56545925, b: 0.56545925, a: 1}

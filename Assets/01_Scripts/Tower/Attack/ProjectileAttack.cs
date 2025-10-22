@@ -6,23 +6,29 @@ public class ProjectileAttack : MonoBehaviour, ITowerAttack
 
     private Tower owner;
 
-    private float angularSpeed = 3600f;
+    private ObjectPool projectilePool;
 
+    [Header("Aim")]
+    private float angularSpeed = 3600f;
     private float aimToleranceDeg = 10f;
+
+    [Header("Projectile")]
+    [SerializeField] private float projectileSpeed = 12f;
+    [SerializeField] private float spriteForwardOffset = 0f;
 
     private void Awake()
     {
         owner = GetComponentInParent<Tower>();
-
+        projectilePool = GetComponent<ObjectPool>();
     }
 
     public void Init(Tower o) => owner = o;
-
 
     public void Apply(TowerInfoSO data)
     {
         var lv = data.levels[owner.currentLevelIndex];
     }
+
     public bool CanFire(Enemy target)
     {
         return target && IsAimedAt(target.transform);
@@ -30,14 +36,27 @@ public class ProjectileAttack : MonoBehaviour, ITowerAttack
 
     public void Attack(Enemy target)
     {
-        if (!CanFire(target)) return;
+        if (!CanFire(target) || !firePoint || !projectilePool) return;
 
-        Debug.Log("Projectile Attack");
+        // 방향 / 각도 계산
+        Vector3 pos = firePoint.position;
+        Vector2 dir = (target.transform.position - pos).normalized;
+        float angz = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + spriteForwardOffset;
+        Quaternion rot = Quaternion.AngleAxis(angz, Vector3.forward);
 
+        // 풀에서 투사체 꺼내기
+        GameObject proj = projectilePool.GetFromPool();
 
+        // 위치 / 회전 세팅
+        proj.transform.SetPositionAndRotation(pos, rot);
+
+        // 이동 방식 세팅
+        if (proj.TryGetComponent<Rigidbody2D>(out var rb))
+        {
+            rb.linearVelocity = -transform.up * projectileSpeed;
+            rb.angularVelocity = 0f;
+        }
     }
-
-
 
     private void Update()
     {
@@ -47,14 +66,12 @@ public class ProjectileAttack : MonoBehaviour, ITowerAttack
         {
             AimToTarget(target.transform, angularSpeed);
         }
-
-
     }
 
     private void AimToTarget(Transform t, float angSpd)
     {
         if (!t) return;
-        Vector2 dir = (t.position - gameObject.transform.position);
+        Vector2 dir = (t.position - transform.position);
         float ang = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + 90f;
         float z = Mathf.MoveTowardsAngle(gameObject.transform.eulerAngles.z, ang, angSpd * Time.deltaTime);
         gameObject.transform.rotation = Quaternion.Euler(0, 0, z);

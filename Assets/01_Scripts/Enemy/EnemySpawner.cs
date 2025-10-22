@@ -7,6 +7,9 @@ public class EnemySpawner : MonoBehaviour
     public EnemySO[] stageEnemies;
     [SerializeField] private Vector3 spawnPoint = Vector3.zero;
 
+    public PathGrid2D grid;
+    public Transform goal;
+
     [Header("Wave Setting")]
     [SerializeField] private int spawnCount = 30;
     [SerializeField] private float spawnInterval = 1f;
@@ -18,6 +21,7 @@ public class EnemySpawner : MonoBehaviour
     private float timer;
     private int spawnedEnemy;
     private bool waveActive = false;
+    
 
     //private float lastSpawnTime;
 
@@ -59,29 +63,33 @@ public class EnemySpawner : MonoBehaviour
         if (data == null) { Debug.LogError($"stageEnemies[{currentStage}]가 null"); }
 
         var go = enemyPool.GetFromPool();
-        go.transform.position = spawnPoint;
+        var cell = grid.WorldToCell(spawnPoint);
+        go.transform.position = grid.CellCenterWorld(cell);
 
         var enemy = go.GetComponent<Enemy>();
 
         enemy.SetPool(enemyPool);
         enemy.Init(data);
 
+        var agent = go.GetComponent<TileAgentAStar2D>();
+        if (!agent) return;
+        if (!grid || !goal) return;
+
+        agent.Init(grid, goal);
+
         spawnedEnemy++;
         spawnIndex++;
 
-        //var dt = Time.time - lastSpawnTime;
-        //lastSpawnTime = Time.time;
-        //Debug.Log($"[Spawner] Spawn {spawnedEnemy}/{spawnCount}  dt={dt:0.00}s  stage={currentStage}");
     }
 
     public void StartWave()
     {
-        
         spawnedEnemy = 0;
         timer = 0f;
         currentStage++;
         Debug.Log(currentStage);
         waveActive = true;
 
+        TileAgentAStar2D.RequestRepathAll();
     }
 }

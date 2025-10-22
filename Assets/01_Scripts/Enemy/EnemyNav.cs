@@ -14,6 +14,11 @@ public class EnemyNav : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = false;
         _agent.updateUpAxis = false;
+        _agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+
+        //var dst = target.position;
+        //dst.z = transform.position.z;
+        //_agent.SetDestination(dst);
     }
 
     IEnumerator Start()

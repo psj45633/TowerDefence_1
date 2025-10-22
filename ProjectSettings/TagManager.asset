@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - Target
+  - Wall
+  - Enemy
+  - Attack
   layers:
   - Default
   - TransparentFX
@@ -15,8 +18,8 @@ TagManager:
   - 
   - 
   - Enemy
-  - 
-  - 
+  - Wall
+  - Tower
   - 
   - 
   - 

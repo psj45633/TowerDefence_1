@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levels:
   - cost: 20
-    damage: 5
+    damage: 10
     fireRate: 0.5
     range: 10
     modealPrefab: {fileID: 0}
