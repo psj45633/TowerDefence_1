@@ -23,8 +23,6 @@ public class EnemySpawner : MonoBehaviour
     private bool waveActive = false;
     
 
-    //private float lastSpawnTime;
-
     private void Awake()
     {
         if (!enemyPool) enemyPool = GetComponent<ObjectPool>();
@@ -33,8 +31,6 @@ public class EnemySpawner : MonoBehaviour
         {
             Debug.LogError("stageEnemies가 비어있음.");
         }
-
-        //currentStage = Mathf.Clamp(currentStage + 1, 0, stageEnemies.Length - 1);
     }
 
     private void Update()

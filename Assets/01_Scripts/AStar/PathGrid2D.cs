@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -127,5 +128,17 @@ public class PathGrid2D : MonoBehaviour
                 Gizmos.DrawWireCube(p, (Vector3)cellSize);
             }
         }
+    }
+
+    public void GetCellsInBounds(Bounds b, List<Vector2Int> outCells)
+    {
+        outCells.Clear();
+        var min = WorldToCell(b.min); var max = WorldToCell(b.max);
+        for (int x = Mathf.Min(min.x, max.x); x <= Mathf.Max(min.x, max.x); x++)
+            for (int y = Mathf.Min(min.y, max.y); y <= Mathf.Max(min.y, max.y); y++)
+            {
+                var c = new Vector2Int(x, y);
+                if (InBounds(c)) outCells.Add(c);
+            }
     }
 }
