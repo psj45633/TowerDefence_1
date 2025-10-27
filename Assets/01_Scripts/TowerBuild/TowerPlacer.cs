@@ -283,13 +283,8 @@ public class TowerPlacer : MonoBehaviour
         }
     }
 
-    bool WouldNotBlockPath(
-    PathGrid2D g,
-    Vector2Int start,
-    Vector2Int goal,
-    List<Vector2Int> extraBlocks,
-    bool allowDiagonal,
-    bool cornerCutBlock)
+    bool WouldNotBlockPath(PathGrid2D g, Vector2Int start, Vector2Int goal,
+        List<Vector2Int> extraBlocks, bool allowDiagonal, bool cornerCutBlock)
     {
         var blocked = new HashSet<Vector2Int>(extraBlocks);
         var q = new Queue<Vector2Int>();
