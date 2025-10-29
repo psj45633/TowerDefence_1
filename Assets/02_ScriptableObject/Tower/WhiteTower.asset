@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WhiteTower
   m_EditorClassIdentifier: 
   levels:
-  - cost: 3
+  - cost: 20
     damage: 10
     fireRate: 0.5
     range: 10

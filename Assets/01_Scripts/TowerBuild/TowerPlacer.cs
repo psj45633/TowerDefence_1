@@ -169,7 +169,9 @@ public class TowerPlacer : MonoBehaviour
                 return;
             }
 
-            int cost = towerPrefab.GetComponent<Tower>().towerData.levels[0].cost;
+            int cost = towerPrefab.CompareTag("Tower")
+                ? towerPrefab.GetComponent<Tower>().towerData.levels[0].cost
+                : towerPrefab.GetComponent<Wall>().cost;
             ConsumeGold(cost);
 
             var inst = Instantiate(towerPrefab, cellCenter, Quaternion.identity, towerParent);

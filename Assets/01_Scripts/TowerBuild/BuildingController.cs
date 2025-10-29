@@ -28,7 +28,9 @@ public class BuildingController : MonoBehaviour
     void SelectTower(int index)
     {
         var tower = buildButtons[index].GetComponent<TowerButton>().prefab;
-        int towerCost = tower.GetComponent<Tower>().towerData.levels[0].cost;
+        int towerCost = tower.CompareTag("Tower")
+            ? tower.GetComponent<Tower>().towerData.levels[0].cost
+            : tower.GetComponent<Wall>().cost;
         if (towerCost > goldManager.Gold)
         {
             Debug.Log("돈이 부족함");
