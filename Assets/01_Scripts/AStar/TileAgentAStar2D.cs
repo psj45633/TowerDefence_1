@@ -24,7 +24,6 @@ public class TileAgentAStar2D : MonoBehaviour
     Rigidbody2D rb;
     readonly List<Vector2Int> path = new();
     int idx = -1;
-    float t;
 
     static readonly Vector2Int[] DIR4 = { new(1, 0), new(-1, 0), new(0, 1), new(0, -1) };
     static readonly Vector2Int[] DIR8 = { new(1, 0), new(-1, 0), new(0, 1), new(0, -1), new(1, 1), new(1, -1), new(-1, 1), new(-1, -1) };
@@ -55,7 +54,6 @@ public class TileAgentAStar2D : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         path.Clear();
         idx = -1;
-        t = 0f;
 
         Repath();
     }
@@ -67,15 +65,6 @@ public class TileAgentAStar2D : MonoBehaviour
     private void OnDestroy() { if (grid) grid.OnGridChanged -= Repath; }
 
     private void Start() => Repath();
-
-    private void Update()
-    {
-        //if (repathIntervel > 0f)
-        //{
-        //    t += Time.deltaTime;
-        //    if (t >= repathIntervel) { t = 0f; Repath(); }
-        //}
-    }
 
     private void FixedUpdate()
     {

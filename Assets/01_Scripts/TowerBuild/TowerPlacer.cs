@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.InputSystem;
 using UnityEditor.Rendering;
+using System.Net;
 
 public class TowerPlacer : MonoBehaviour
 {
@@ -17,20 +18,21 @@ public class TowerPlacer : MonoBehaviour
     private GameObject indicatorObj;
     private SpriteRenderer indicatorRenderer;
 
-
-    private bool buildMode = false;
-    private GameObject towerPrefab;
-    private GameObject previewObj;
-    private HashSet<Vector3Int> occupied = new HashSet<Vector3Int>();
-
     [Header("Block cells")]
     [SerializeField] Vector2 startWorld = new Vector2(-6f, 12f);
     [SerializeField] Vector2 endWorld = new Vector2(6f, -11f);
+
+    private bool buildMode = false;
+    public GameObject towerPrefab;
+    private GameObject previewObj;
+    private HashSet<Vector3Int> occupied = new HashSet<Vector3Int>();
 
     Vector3Int startCell;
     Vector3Int endCell;
 
     private readonly List<Vector2Int> tmpCells = new List<Vector2Int>();
+
+    [SerializeField] private GoldManager goldManager;
 
     private void Awake()
     {
@@ -88,99 +90,6 @@ public class TowerPlacer : MonoBehaviour
 
     private void Update()
     {
-        //if (!buildMode || towerPrefab == null) return;
-
-        //Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        //mouseWorld.z = 0;
-        //Vector3Int cell = buildableMap.WorldToCell(mouseWorld);
-        //Vector3 cellCenter = buildableMap.GetCellCenterWorld(cell);
-
-        //bool isOverBoard = buildableMap.HasTile(cell);
-
-        //if (previewObj != null)
-        //    previewObj.SetActive(isOverBoard);
-
-        //if (!isOverBoard) return;
-
-
-        //bool onBlockedCell = (cell == startCell) || (cell == endCell);
-
-        //bool canBuild = !occupied.Contains(cell) && !onBlockedCell;
-
-        //// ==========================================
-
-        //if (previewObj != null)
-        //{
-        //    Bounds previewBounds;
-        //    var srcCols = towerPrefab.GetComponentsInChildren<Collider2D>();
-        //    if (srcCols != null && srcCols.Length > 0)
-        //    {
-        //        previewBounds = srcCols[0].bounds;
-        //        for (int i = 1; i < srcCols.Length; i++)
-        //        {
-        //            previewBounds.Encapsulate(srcCols[i].bounds);
-        //        }
-
-        //        previewBounds.center = cellCenter;
-        //    }
-        //    else
-        //    {
-        //        previewBounds = new Bounds(cellCenter, new Vector3(0.9f, 0.9f, 0f));
-        //    }
-
-        //    tmpCells.Clear();
-        //    grid.GetCellsInBounds(previewBounds, tmpCells);
-
-        //    bool allWalkable = true;
-        //    for (int i = 0; i < tmpCells.Count; i++)
-        //    {
-        //        if (!grid.IsWalkable(tmpCells[i]))
-        //        {
-        //            allWalkable = false;
-        //            break;
-        //        }
-        //    }
-
-        //    canBuild = canBuild && allWalkable;
-
-        //    // =====================================
-
-        //    if (previewObj != null)
-        //    {
-        //        previewObj.transform.position = cellCenter;
-        //        if (indicatorRenderer != null)
-        //        {
-        //            indicatorRenderer.color = canBuild ? new Color(0f, 1f, 0f, indicatorAlpha) : new Color(1f, 0f, 0f, indicatorAlpha);
-        //        }
-        //    }
-        //}
-
-        //if (Mouse.current.leftButton.wasReleasedThisFrame && canBuild)
-        //{
-        //    var inst = Instantiate(towerPrefab, cellCenter, Quaternion.identity, towerParent);
-        //    occupied.Add(cell);
-
-        //    // 새로 놓은 타워 콜라이더가 덮는 모든 셀을 갱신
-        //    if (grid && inst)
-        //    {
-        //        var cols = inst.GetComponentsInChildren<Collider2D>();
-        //        if (cols != null && cols.Length > 0)
-        //        {
-        //            var total = cols[0].bounds;
-        //            for (int i = 1; i < cols.Length; i++) total.Encapsulate(cols[i].bounds);
-        //            grid.RefreshCellsByBounds(total);  // 다셀 갱신
-        //        }
-        //        else
-        //        {
-        //            grid.RefreshCellAtWorld(cellCenter); // (콜라이더가 한 칸이면 대안)
-        //        }
-
-        //        grid.ForceRepathAll(); // 모든 에이전트 즉시 리패스
-        //    }
-
-        //    CleanupPreview();
-        //    buildMode = false;
-        //}
         if (!buildMode || towerPrefab == null) return;
 
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
@@ -200,10 +109,7 @@ public class TowerPlacer : MonoBehaviour
         // 기존: 타일 점유/스타트/엔드만 보던 로직
         bool canBuild = !occupied.Contains(cell) && !onBlockedCell;
 
-        // ─────────────────────────────────────────────────────────────
-        // ★ 추가: 프리뷰 범위가 덮는 셀을 '가상 차단'으로 가정하고
-        //         Start → End 경로가 남아있는지 미리 검사
-        // ─────────────────────────────────────────────────────────────
+        // 프리뷰 범위가 덮는 셀을 가상 차단으로 가정하고 경로가 남아있는지 미리 검사
         if (grid != null && towerPrefab != null)
         {
             // 1) 프리팹의 콜라이더 bounds 합치기
@@ -255,8 +161,17 @@ public class TowerPlacer : MonoBehaviour
             }
         }
 
-        if (Mouse.current.leftButton.wasReleasedThisFrame && canBuild)
+        if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
+            if (!canBuild)
+            {
+                Debug.Log("그곳에 지을 수 없음");
+                return;
+            }
+
+            int cost = towerPrefab.GetComponent<Tower>().towerData.levels[0].cost;
+            ConsumeGold(cost);
+
             var inst = Instantiate(towerPrefab, cellCenter, Quaternion.identity, towerParent);
             occupied.Add(cell);
 
@@ -281,6 +196,7 @@ public class TowerPlacer : MonoBehaviour
             CleanupPreview();
             buildMode = false;
         }
+
     }
 
     bool WouldNotBlockPath(PathGrid2D g, Vector2Int start, Vector2Int goal,
@@ -329,5 +245,17 @@ public class TowerPlacer : MonoBehaviour
             }
         }
         return false;
+    }
+
+    private void ConsumeGold(int gold)
+    {
+        if (!goldManager.CanAfford(gold)) return;
+        
+        goldManager.TrySpend(gold);
+    }
+
+    private void NotEnoughGoldTxt()
+    {
+
     }
 }

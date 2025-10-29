@@ -10,6 +10,7 @@ public class Tower : MonoBehaviour
     ITowerAttack attack;
     public TowerTargeter targeter;
 
+    private int wallLayer;
 
     void Awake()
     {
