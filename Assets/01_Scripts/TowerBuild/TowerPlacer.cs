@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine.InputSystem;
 using UnityEditor.Rendering;
 using System.Net;
+using TMPro;
 
 public class TowerPlacer : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class TowerPlacer : MonoBehaviour
     private readonly List<Vector2Int> tmpCells = new List<Vector2Int>();
 
     [SerializeField] private GoldManager goldManager;
+    [SerializeField] private TxtHandler txtHandler;
 
     private void Awake()
     {
@@ -166,6 +168,7 @@ public class TowerPlacer : MonoBehaviour
             if (!canBuild)
             {
                 Debug.Log("그곳에 지을 수 없음");
+                txtHandler.ActiveTxt(1);
                 return;
             }
 
