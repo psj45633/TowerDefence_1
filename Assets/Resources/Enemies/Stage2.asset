@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b070046d6f5e424a89146b53f31cb1f, type: 3}
   m_Name: Stage2
   m_EditorClassIdentifier: 
-  stageIndex: 0
+  stage: 2
   MaxHp: 110
   baseMoveSpeed: 3
   rewardGold: 1
-  sprite: {fileID: 0}
+  sprite: {fileID: 7482667652216324306, guid: fa021cf2fbf469643ac0131d27245109, type: 3}
   tintColor: {r: 0.9150943, g: 0.56545925, b: 0.56545925, a: 1}
