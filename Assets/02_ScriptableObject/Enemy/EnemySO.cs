@@ -4,7 +4,7 @@
 [CreateAssetMenu(fileName ="EnemySO",menuName ="EnemySO")]
 public class EnemySO : ScriptableObject
 {
-    public int stageIndex;
+    public int stage;
 
     public int MaxHp;
     public float baseMoveSpeed = 1f;

@@ -22,7 +22,9 @@ public class Enemy : MonoBehaviour
     public void Init(EnemySO data)
     {
         def = data;
-
+        var sr = GetComponentInChildren<SpriteRenderer>();
+        sr.color = data.tintColor;
+        sr.sprite = data.sprite;
         if (!enemyStats) enemyStats = GetComponent<EnemyStats>();
 
         enemyStats.OnDied -= OnKilled;

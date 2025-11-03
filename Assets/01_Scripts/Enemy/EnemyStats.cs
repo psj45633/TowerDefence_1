@@ -55,7 +55,7 @@ public class EnemyStats : MonoBehaviour
             hpBarTimer -= Time.deltaTime;
             if (hpBarTimer <= 0)
             {
-                onHpBar = false;
+                OnHpBar(false);
             }
         }
 

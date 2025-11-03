@@ -269,7 +269,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 0}
   goal: {fileID: 0}
-  speed: 2
+  speed: 8.63
   arriveEps: 0.02
   repathIntervel: 0.25
   allowDiagonal: 1

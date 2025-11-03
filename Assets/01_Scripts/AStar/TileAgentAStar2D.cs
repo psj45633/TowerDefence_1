@@ -15,13 +15,13 @@ public class TileAgentAStar2D : MonoBehaviour
     public Transform goal;
 
     [Header("Move")]
-    public float speed = 2f;
     public float arriveEps = 0.05f;
     public float repathIntervel = 0.25f;
     public bool allowDiagonal = true;
     public bool cornerCutBlock = true;
 
     Rigidbody2D rb;
+    Enemy enemy;
     readonly List<Vector2Int> path = new();
     int idx = -1;
 
@@ -30,6 +30,7 @@ public class TileAgentAStar2D : MonoBehaviour
 
     private void Awake()
     {
+        enemy = GetComponent<Enemy>();
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
@@ -75,7 +76,7 @@ public class TileAgentAStar2D : MonoBehaviour
         var nextCenter = grid.CellCenterWorld(nextCell);
 
         Vector3 pos = transform.position;
-        Vector3 newPos = Vector3.MoveTowards(pos, nextCenter, speed * Time.fixedDeltaTime);
+        Vector3 newPos = Vector3.MoveTowards(pos, nextCenter, enemy.def.baseMoveSpeed * Time.fixedDeltaTime);
         rb.MovePosition(newPos);
 
         float dist = (nextCenter - newPos).sqrMagnitude;
