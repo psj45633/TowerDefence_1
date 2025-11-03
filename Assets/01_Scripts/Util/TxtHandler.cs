@@ -23,6 +23,11 @@ public class TxtHandler : MonoBehaviour
 
     public void ActiveTxt(int idx)
     {
+        for (int i = 0; i < txts.Length; i++)
+        {
+            txts[i].gameObject.SetActive(false);
+        }
+
         txts[idx].gameObject.SetActive(true);
         waitTime = 2f;
     }
