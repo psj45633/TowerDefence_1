@@ -45,15 +45,19 @@ public class ProjectileAttack : MonoBehaviour, ITowerAttack
         Quaternion rot = Quaternion.AngleAxis(angz, Vector3.forward);
 
         // 풀에서 투사체 꺼내기
-        GameObject proj = projectilePool.GetFromPool();
+        GameObject projGO = projectilePool.GetFromPool();
 
-        // 위치 / 회전 세팅
-        proj.transform.SetPositionAndRotation(pos, rot);
+        // 위치 / 회전
+        projGO.transform.SetPositionAndRotation(pos, rot);
+
+        // 타겟 세팅
+        Projectile proj = projGO.GetComponent<Projectile>();
+        proj.Init(target);
 
         // 이동 방식 세팅
         if (proj.TryGetComponent<Rigidbody2D>(out var rb))
         {
-            rb.linearVelocity = -transform.up * projectileSpeed;
+            rb.linearVelocity = -transform.up;
             rb.angularVelocity = 0f;
         }
     }
