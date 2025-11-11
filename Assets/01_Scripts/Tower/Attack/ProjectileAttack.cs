@@ -13,7 +13,7 @@ public class ProjectileAttack : MonoBehaviour, ITowerAttack
     private float aimToleranceDeg = 10f;
 
     [Header("Projectile")]
-    [SerializeField] private float projectileSpeed = 12f;
+    //[SerializeField] private float projectileSpeed = 12f;
     [SerializeField] private float spriteForwardOffset = 0f;
 
     private void Awake()

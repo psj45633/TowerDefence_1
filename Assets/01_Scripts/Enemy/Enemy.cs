@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
 
     private ObjectPool pool;
     private EnemyStats enemyStats;
-    public EnemySO def;
+    public EnemySO def { get; set; }
 
     private void Awake()
     {
