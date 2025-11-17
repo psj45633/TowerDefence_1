@@ -60,9 +60,7 @@ public class Enemy : MonoBehaviour
         else if (other.CompareTag("Attack"))
         {
             Tower tower = other.GetComponentInParent<Tower>();
-            
-            int towerLv = tower.currentLevelIndex;
-            int towerDamage = tower.towerData.levels[towerLv].damage;
+            int towerDamage = tower.curDamage;
             enemyStats.TakeDamage(towerDamage);
 
         }

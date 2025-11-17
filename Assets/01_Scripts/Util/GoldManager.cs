@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GoldManager : MonoBehaviour
 {
-    [SerializeField] private int gold = 0;
+    [SerializeField] private int gold;
     public int Gold => gold;
 
     public event Action<int> OnGoldChanged;

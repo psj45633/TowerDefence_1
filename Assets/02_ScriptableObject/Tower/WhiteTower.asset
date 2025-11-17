@@ -17,20 +17,23 @@ MonoBehaviour:
     damage: 10
     fireRate: 0.5
     range: 10
-    modealPrefab: {fileID: 0}
+    bodyImage: {fileID: 0}
+    headImage: {fileID: 0}
     projectilePrefab: {fileID: 0}
     shootSfx: {fileID: 0}
   - cost: 40
     damage: 10
-    fireRate: 1
+    fireRate: 0.4
     range: 3.5
-    modealPrefab: {fileID: 0}
+    bodyImage: {fileID: 0}
+    headImage: {fileID: 0}
     projectilePrefab: {fileID: 0}
     shootSfx: {fileID: 0}
   - cost: 70
-    damage: 15
-    fireRate: 1
+    damage: 30
+    fireRate: 0.3
     range: 4
-    modealPrefab: {fileID: 0}
+    bodyImage: {fileID: 0}
+    headImage: {fileID: 0}
     projectilePrefab: {fileID: 0}
     shootSfx: {fileID: 0}

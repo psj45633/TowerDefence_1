@@ -29,6 +29,16 @@ public class Projectile : MonoBehaviour
 
     private void Update()
     {
+        if (!target.gameObject.activeInHierarchy)
+        {
+            DestroyObj();
+        }
+
+        SearchTarget();
+    }
+
+    private void SearchTarget()
+    {
         // 현재 위치 → 타겟 방향
         Vector3 pos = transform.position;
         Vector3 targetPos = target.transform.position;
@@ -43,5 +53,10 @@ public class Projectile : MonoBehaviour
         Vector2 dir = toTarget.normalized;
         float angz = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + spriteForwardOffset;
         transform.rotation = Quaternion.Euler(0f, 0f, angz);
+    }
+
+    private void DestroyObj()
+    {
+        pool.ReturnToPool(gameObject);
     }
 }

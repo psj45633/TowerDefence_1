@@ -17,7 +17,8 @@ public class TowerLevel
     public float range;
 
     [Header("Visual/Prefab")]
-    public GameObject modealPrefab;
+    public Sprite bodyImage;
+    public Sprite headImage;
 
     [Header("Projectile")]
     public GameObject projectilePrefab;

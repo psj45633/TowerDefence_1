@@ -1,26 +1,59 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class Tower : MonoBehaviour
 {
     public TowerInfoSO towerData;
     public int currentLevelIndex = 0;
 
-    private float fireRate;
-
     ITowerAttack attack;
     public TowerTargeter targeter;
 
     private int wallLayer;
 
+    [SerializeField] private Image curInfoImage;
+    [SerializeField] private TextMeshProUGUI curInfotxt;
+    private GoldManager goldManager;
+
+    [Header("Info")]
+    public int costValue;
+    public int curDamage;
+    public float curFireRate;
+    public float curRange;
+    public Sprite curBodyImage;
+    public Sprite curHeadImage;
+    public GameObject curProjectile;
+    public AudioClip curAudioClip;
+
+    
+
     void Awake()
     {
+        ApplyLevel(0);
+
         attack = GetComponentInChildren<ITowerAttack>();
         attack.Init(this);
         attack.Apply(towerData);
         targeter = GetComponentInChildren<TowerTargeter>();
-        fireRate = towerData.levels[currentLevelIndex].fireRate;
+        Init(currentLevelIndex);
 
-        ApplyLevel(0);
+        var gm = Object.FindAnyObjectByType<GoldManager>();
+        goldManager = gm;
+    }
+
+    private void Init(int lv)
+    {
+        costValue = towerData.levels[lv].cost;
+        curDamage = towerData.levels[lv].damage;
+        curFireRate = towerData.levels[lv].fireRate;
+        curRange = towerData.levels[lv].range;
+        curBodyImage = towerData.levels[lv].bodyImage;
+        curHeadImage = towerData.levels[lv].headImage;
+        curProjectile = towerData.levels[lv].projectilePrefab;
+        curAudioClip = towerData.levels[lv].shootSfx;
+        
+        curInfotxt.text = $"Level : {currentLevelIndex+1}\nDamage : {curDamage}\nFire Rate : {curFireRate}\nRange : {curRange}";
     }
 
 
@@ -29,7 +62,12 @@ public class Tower : MonoBehaviour
     public void Upgrade()
     {
         if (IsMaxLevel) return;
-        ApplyLevel(currentLevelIndex + 1);
+
+        goldManager.TrySpend(costValue);
+        currentLevelIndex++;
+        ApplyLevel(currentLevelIndex);
+
+        Init(currentLevelIndex);
     }
 
     private void ApplyLevel(int levelIndex)
@@ -45,12 +83,18 @@ public class Tower : MonoBehaviour
 
         timer += Time.deltaTime;
         //if (target != null && timer > fireCooldown && attack.CanFire(target))
-        if (target != null && timer > fireRate)
+        if (target != null && timer > curFireRate)
         {
             attack.Attack(target);
             timer = 0;
         }
 
+    }
+
+    public void ShowInfo()
+    {
+        var active = curInfoImage.gameObject.activeInHierarchy;
+        curInfoImage.gameObject.SetActive(!active);
     }
 
 
