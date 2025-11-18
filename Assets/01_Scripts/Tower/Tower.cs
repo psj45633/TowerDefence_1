@@ -13,11 +13,17 @@ public class Tower : MonoBehaviour
     private int wallLayer;
 
     [SerializeField] private Image curInfoImage;
-    [SerializeField] private TextMeshProUGUI curInfotxt;
+    [SerializeField] private TextMeshProUGUI curInfoTxt;
+    [SerializeField] private TextMeshProUGUI upgradeCostTxt;
     private GoldManager goldManager;
+
+    public Vector3Int placedCell { get; set; }
+    public TowerPlacer ownerPlacer { get; set; }
 
     [Header("Info")]
     public int costValue;
+    public int upgradeCost;
+    private int totalCost;
     public int curDamage;
     public float curFireRate;
     public float curRange;
@@ -52,8 +58,10 @@ public class Tower : MonoBehaviour
         curHeadImage = towerData.levels[lv].headImage;
         curProjectile = towerData.levels[lv].projectilePrefab;
         curAudioClip = towerData.levels[lv].shootSfx;
-        
-        curInfotxt.text = $"Level : {currentLevelIndex+1}\nDamage : {curDamage}\nFire Rate : {curFireRate}\nRange : {curRange}";
+
+        totalCost += costValue;
+        curInfoTxt.text = $"Level : {currentLevelIndex+1}\nDamage : {curDamage}\nFire Rate : {curFireRate}\nRange : {curRange}";
+        upgradeCostTxt.text = IsMaxLevel ? "-" : $"{towerData.levels[lv+1].cost}";
     }
 
 
@@ -62,12 +70,10 @@ public class Tower : MonoBehaviour
     public void Upgrade()
     {
         if (IsMaxLevel) return;
-
-        goldManager.TrySpend(costValue);
         currentLevelIndex++;
-        ApplyLevel(currentLevelIndex);
-
         Init(currentLevelIndex);
+        goldManager.TrySpend(costValue);
+        ApplyLevel(currentLevelIndex);
     }
 
     private void ApplyLevel(int levelIndex)
@@ -79,6 +85,7 @@ public class Tower : MonoBehaviour
     float timer;
     void Update()
     {
+        
         var target = targeter.currentTarget;
 
         timer += Time.deltaTime;
@@ -89,15 +96,33 @@ public class Tower : MonoBehaviour
             timer = 0;
         }
 
+        //if (menuController != null) return;
+        //if (gameObject.activeInHierarchy)
+        //{
+        //    menuController = GetComponentInParent<TowerMenuController>();
+        //    menuController.towers.Add(this);
+        //}
     }
 
     public void ShowInfo()
     {
+
         var active = curInfoImage.gameObject.activeInHierarchy;
         curInfoImage.gameObject.SetActive(!active);
     }
 
+    public void Sell()
+    {
+        goldManager.Add(totalCost);
 
+        // 점유 해제 + 그리드 갱신
+        if (ownerPlacer != null)
+        {
+            ownerPlacer.FreeCell(placedCell, GetComponentsInChildren<Collider2D>());
+        }
+
+        Destroy(gameObject);
+    }
 
 
 

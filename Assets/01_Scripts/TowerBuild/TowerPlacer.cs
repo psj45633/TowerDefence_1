@@ -26,8 +26,9 @@ public class TowerPlacer : MonoBehaviour
     private bool buildMode = false;
     public GameObject towerPrefab;
     private GameObject previewObj;
-    private HashSet<Vector3Int> occupied = new HashSet<Vector3Int>();
+    public HashSet<Vector3Int> occupied = new HashSet<Vector3Int>();
 
+    public Vector3Int cell;
     Vector3Int startCell;
     Vector3Int endCell;
 
@@ -96,7 +97,7 @@ public class TowerPlacer : MonoBehaviour
 
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         mouseWorld.z = 0;
-        Vector3Int cell = buildableMap.WorldToCell(mouseWorld);
+        cell = buildableMap.WorldToCell(mouseWorld);
         Vector3 cellCenter = buildableMap.GetCellCenterWorld(cell);
 
         bool isOverBoard = buildableMap.HasTile(cell);
@@ -180,6 +181,13 @@ public class TowerPlacer : MonoBehaviour
             var inst = Instantiate(towerPrefab, cellCenter, Quaternion.identity, towerParent);
             occupied.Add(cell);
 
+            var towerComp = inst.GetComponent<Tower>();
+            if (towerComp != null)
+            {
+                towerComp.ownerPlacer = this;
+                towerComp.placedCell = cell;
+            }
+
             // 새로 놓은 타워 콜라이더가 덮는 모든 셀을 갱신
             if (grid && inst)
             {
@@ -201,7 +209,6 @@ public class TowerPlacer : MonoBehaviour
             CleanupPreview();
             buildMode = false;
         }
-
     }
 
     bool WouldNotBlockPath(PathGrid2D g, Vector2Int start, Vector2Int goal,
@@ -259,8 +266,25 @@ public class TowerPlacer : MonoBehaviour
         goldManager.TrySpend(gold);
     }
 
-    private void NotEnoughGoldTxt()
+    public void FreeCell(Vector3Int c, Collider2D[] cols = null)
     {
+        occupied.Remove(c);
 
+        // 길막 갱신
+        if (grid)
+        {
+            if (cols != null && cols.Length > 0)
+            {
+                var total = cols[0].bounds;
+                for (int i = 1; i < cols.Length; i++) total.Encapsulate(cols[i].bounds);
+                grid.RefreshCellsByBounds(total);
+            }
+            else
+            {
+                var center = buildableMap.GetCellCenterWorld(c);
+                grid.RefreshCellAtWorld(center);
+            }
+            grid.ForceRepathAll();
+        }
     }
 }

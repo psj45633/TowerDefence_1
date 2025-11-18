@@ -7696,7 +7696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7777e40a8c7462439e16f7789905693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gold: 100
+  gold: 300
 --- !u!1 &1679786174
 GameObject:
   m_ObjectHideFlags: 0
@@ -7899,6 +7899,7 @@ MonoBehaviour:
   startWorld: {x: -6, y: 12}
   endWorld: {x: 6, y: -11}
   towerPrefab: {fileID: 0}
+  cell: {x: 0, y: 0, z: 0}
   goldManager: {fileID: 1624133657}
   txtHandler: {fileID: 1489747555}
 --- !u!114 &1741243645
