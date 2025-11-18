@@ -16,6 +16,7 @@ public class Tower : MonoBehaviour
     [SerializeField] private TextMeshProUGUI curInfoTxt;
     [SerializeField] private TextMeshProUGUI upgradeCostTxt;
     private GoldManager goldManager;
+    private TowerMenuController registry;
 
     public Vector3Int placedCell { get; set; }
     public TowerPlacer ownerPlacer { get; set; }
@@ -121,10 +122,28 @@ public class Tower : MonoBehaviour
             ownerPlacer.FreeCell(placedCell, GetComponentsInChildren<Collider2D>());
         }
 
+        registry?.Unregister(this);
+
         Destroy(gameObject);
     }
 
+    private void OnEnable()
+    {
+        registry = GetComponentInParent<TowerMenuController>();
+        registry?.Register(this);
+    }
 
+    private void OnDisable()
+    {
+        // SetActive(false)나 파괴 직전에도 호출됨
+        registry?.Unregister(this);
+    }
+
+    // 선택: 방어적 중복 제거
+    private void OnDestroy()
+    {
+        registry?.Unregister(this);
+    }
 
 
 }

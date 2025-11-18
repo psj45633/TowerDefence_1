@@ -10,6 +10,7 @@ public class TowerPlacer : MonoBehaviour
 {
     public Tilemap buildableMap;
     public Transform towerParent;
+    public Transform previewParent;
     public PathGrid2D grid;
 
     [Header("Preview Indicator")]
@@ -53,7 +54,7 @@ public class TowerPlacer : MonoBehaviour
             if (previewObj == null)
             {
                 previewObj = Instantiate(towerPrefab);
-                previewObj.transform.SetParent(towerParent, true);
+                previewObj.transform.SetParent(previewParent, true);
                 foreach (var col in previewObj.GetComponentsInChildren<Collider2D>()) Destroy(col);
 
                 indicatorObj = new GameObject("BuildIndicator");
