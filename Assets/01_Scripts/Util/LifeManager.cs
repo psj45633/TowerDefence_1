@@ -50,7 +50,7 @@ public class LifeManager : MonoBehaviour
 
         if (CurLife == 0)
         {
-            // GameManager.Instance.GameOver();
+            GameManager.Instance.GameOver();
         }
     }
 
