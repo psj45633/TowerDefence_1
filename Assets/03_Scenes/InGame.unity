@@ -9052,7 +9052,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameoverPanel: {fileID: 931740976}
-  menu: {fileID: 0}
+  menu: {fileID: 1016564239}
 --- !u!4 &1461781861
 Transform:
   m_ObjectHideFlags: 0
