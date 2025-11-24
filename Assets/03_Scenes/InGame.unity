@@ -6996,6 +6996,7 @@ MonoBehaviour:
   spawnCount: 30
   spawnInterval: 1
   currentStage: 0
+  stageTxt: {fileID: 1679786176}
   spawnIndex: 1
   waveActive: 0
 --- !u!114 &1081095042
@@ -9052,7 +9053,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameoverPanel: {fileID: 931740976}
-  menu: {fileID: 1016564239}
+  menuPanel: {fileID: 1016564239}
 --- !u!4 &1461781861
 Transform:
   m_ObjectHideFlags: 0

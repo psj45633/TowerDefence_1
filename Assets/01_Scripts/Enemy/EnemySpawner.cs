@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -15,6 +16,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int spawnCount = 30;
     [SerializeField] private float spawnInterval = 1f;
     [SerializeField] private int currentStage = 0;
+    [SerializeField] private TextMeshProUGUI stageTxt;
 
     public int spawnIndex = 1;
 
@@ -85,6 +87,7 @@ public class EnemySpawner : MonoBehaviour
         spawnedEnemy = 0;
         timer = 0f;
         currentStage++;
+        stageTxt.text = $"{currentStage}";
         Debug.Log(currentStage);
         waveActive = true;
 

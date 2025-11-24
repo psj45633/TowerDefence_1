@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private GameObject gameoverPanel;
-    [SerializeField] private GameObject menu;
+    [SerializeField] private GameObject menuPanel;
 
     public void GameOver()
     {
@@ -24,19 +24,19 @@ public class GameManager : Singleton<GameManager>
 
     public void Pause()
     {
-        if(menu != null)
+        if(menuPanel != null)
         {
             Time.timeScale = 0f;
-            menu.SetActive(true);
+            menuPanel.SetActive(true);
         }
     }
 
     public void Resume()
     {
-        if(menu != null)
+        if(menuPanel != null)
         {
             Time.timeScale = 1.0f;
-            menu.SetActive(false);
+            menuPanel.SetActive(false);
         }
         
     }
