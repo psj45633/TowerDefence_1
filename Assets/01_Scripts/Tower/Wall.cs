@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class Wall : MonoBehaviour
 {
@@ -8,8 +7,10 @@ public class Wall : MonoBehaviour
     private GoldManager goldManager;
 
     [SerializeField] private GameObject menuObj;
+    TowerPlacer ownerPlacer;
+    Vector3Int placedCell { get; set; }
 
-    
+
     void Awake()
     {
         var gm = Object.FindAnyObjectByType<GoldManager>();
@@ -18,8 +19,6 @@ public class Wall : MonoBehaviour
 
     public void TowerMenu()
     {
-        
-
         var active = menuObj.gameObject.activeInHierarchy;
         menuObj.gameObject.SetActive(!active);
     }
@@ -28,7 +27,10 @@ public class Wall : MonoBehaviour
     {
         goldManager.Add(cost);
         Destroy(gameObject);
-
+        if (ownerPlacer != null)
+        {
+            ownerPlacer.FreeCell(placedCell, GetComponentsInChildren<Collider2D>());
+        }
         var placer = FindFirstObjectByType<TowerPlacer>();
         placer.occupied.Remove(placer.cell);
     }
