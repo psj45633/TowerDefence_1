@@ -14,23 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levels:
   - cost: 50
-    damage: 10
-    fireRate: 2
-    range: 3
-    modealPrefab: {fileID: 0}
-    projectilePrefab: {fileID: 0}
+    damage: 30
+    fireRateCoefficient: 0.7
+    range: 5
+    bodyImage: {fileID: 21300000, guid: a01d21ff43ae1384ea0628c43707deee, type: 3}
+    headImage: {fileID: 21300000, guid: 2db1a424a546b514eae77d3732fd9bc5, type: 3}
+    projectilePrefab: {fileID: 4151839198068422784, guid: 868dfe91a70bb4e4baea53626f4c1762, type: 3}
     shootSfx: {fileID: 0}
   - cost: 70
-    damage: 30
-    fireRate: 2
-    range: 5
-    modealPrefab: {fileID: 0}
-    projectilePrefab: {fileID: 0}
+    damage: 50
+    fireRateCoefficient: 0.7
+    range: 6
+    bodyImage: {fileID: 21300000, guid: a01d21ff43ae1384ea0628c43707deee, type: 3}
+    headImage: {fileID: 21300000, guid: 2db1a424a546b514eae77d3732fd9bc5, type: 3}
+    projectilePrefab: {fileID: 4151839198068422784, guid: 868dfe91a70bb4e4baea53626f4c1762, type: 3}
     shootSfx: {fileID: 0}
   - cost: 100
-    damage: 50
-    fireRate: 2
+    damage: 70
+    fireRateCoefficient: 0.7
     range: 7
-    modealPrefab: {fileID: 0}
-    projectilePrefab: {fileID: 0}
+    bodyImage: {fileID: 21300000, guid: a01d21ff43ae1384ea0628c43707deee, type: 3}
+    headImage: {fileID: 21300000, guid: 2db1a424a546b514eae77d3732fd9bc5, type: 3}
+    projectilePrefab: {fileID: 4151839198068422784, guid: 868dfe91a70bb4e4baea53626f4c1762, type: 3}
     shootSfx: {fileID: 0}

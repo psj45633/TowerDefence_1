@@ -15,7 +15,7 @@ MonoBehaviour:
   levels:
   - cost: 20
     damage: 10
-    fireRate: 1
+    fireRateCoefficient: 1
     range: 3
     bodyImage: {fileID: 21300000, guid: 20e0d538c850a594ab3985291642fbfe, type: 3}
     headImage: {fileID: 21300000, guid: c559f6836d7d733478df588a39c8fb28, type: 3}
@@ -23,7 +23,7 @@ MonoBehaviour:
     shootSfx: {fileID: 0}
   - cost: 40
     damage: 15
-    fireRate: 0.8
+    fireRateCoefficient: 1.2
     range: 3.5
     bodyImage: {fileID: 21300000, guid: 7476d0654d73cd240b64dc9e05d92c53, type: 3}
     headImage: {fileID: 21300000, guid: 0d49bed9ca8715744bc587e7acddb587, type: 3}
@@ -31,7 +31,7 @@ MonoBehaviour:
     shootSfx: {fileID: 0}
   - cost: 70
     damage: 30
-    fireRate: 0.6
+    fireRateCoefficient: 1.5
     range: 4
     bodyImage: {fileID: 21300000, guid: 516fa3649ca8ce04eb9f29f26e9bd411, type: 3}
     headImage: {fileID: 21300000, guid: b7d782c2992cdcc499cdf879c7bdfcc8, type: 3}

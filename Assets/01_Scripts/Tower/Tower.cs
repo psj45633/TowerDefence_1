@@ -52,7 +52,7 @@ public class Tower : MonoBehaviour
     {
         costValue = towerData.levels[lv].cost;
         curDamage = towerData.levels[lv].damage;
-        curFireRate = towerData.levels[lv].fireRate;
+        curFireRate = towerData.levels[lv].fireRate();
         curRange = towerData.levels[lv].range;
         curBodyImage.sprite = towerData.levels[lv].bodyImage;
         curHeadImage.sprite = towerData.levels[lv].headImage;

@@ -13,7 +13,7 @@ public class TowerLevel
     [Header("Stats")]
     public int cost;
     public int damage;
-    public float fireRate;
+    public float fireRateCoefficient;
     public float range;
 
     [Header("Visual/Prefab")]
@@ -26,7 +26,8 @@ public class TowerLevel
     [Header("SFX")]
     public AudioClip shootSfx;
 
-
+    [HideInInspector]
+    public float fireRate() { return 1 / fireRateCoefficient; }
 
 
 

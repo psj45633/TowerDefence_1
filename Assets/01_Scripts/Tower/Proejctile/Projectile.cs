@@ -7,6 +7,13 @@ public class Projectile : MonoBehaviour
     public Enemy target;
     public float moveSpeed = 20f;
     private float spriteForwardOffset = 0f;
+    Vector3 targetPosition;
+
+    [Header("Splash")]
+    [SerializeField] private bool isSplash;
+    [SerializeField] private float splashRadius = 0.5f;
+    [SerializeField, Range(0f, 1f)] private float splashRate = 1f;
+    [SerializeField] private LayerMask enemyMask;
 
     private void Start()
     {
@@ -19,23 +26,63 @@ public class Projectile : MonoBehaviour
         target = t;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D col)
     {
-        if (collision.CompareTag("Enemy"))
+        int towerDamage = owner.curDamage;
+
+        if (col.CompareTag("Enemy"))
         {
-            int towerDamage = owner.curDamage;
-            collision.GetComponent<EnemyStats>().TakeDamage(towerDamage);
-            pool.ReturnToPool(gameObject);
+
+            var hitEnemy = col.GetComponent<EnemyStats>();
+            DestroyObj();
+            if (isSplash)
+            {
+                DoSplashDamage(hitEnemy, towerDamage);
+            }
+            else
+            {
+                hitEnemy.TakeDamage(towerDamage);
+            }
         }
-        else if (collision.CompareTag("Wall"))
+        else if (col.CompareTag("Wall"))
         {
-            pool.ReturnToPool(gameObject);
+            DestroyObj();
+        }
+    }
+
+    private void DoSplashDamage(EnemyStats mainEnemy, int towerDamage)
+    {
+        Vector2 center = transform.position;
+
+        // 범위 안 Enemy 전부 찾기
+        var hits = Physics2D.OverlapCircleAll(center, splashRadius, enemyMask);
+
+        foreach (var hit in hits)
+        {
+            var enemy = hit.GetComponent<EnemyStats>();
+            if (enemy == null) continue;
+
+            if (enemy == mainEnemy)
+            {
+                // 대상 풀뎀
+                enemy.TakeDamage(towerDamage);
+            }
+            else
+            {
+                // 주변 스플 비율
+                int splashDamage = Mathf.RoundToInt(towerDamage * splashRate);
+                enemy.TakeDamage(splashDamage);
+            }
         }
     }
 
     private void Update()
     {
-        if (!target.gameObject.activeInHierarchy) DestroyObj();
+        if (!target.gameObject.activeInHierarchy)
+        {
+            if (transform.position == targetPosition)
+                DestroyObj();
+        }
 
         SearchTarget();
     }
@@ -45,6 +92,7 @@ public class Projectile : MonoBehaviour
         // 현재 위치 → 타겟 방향
         Vector3 pos = transform.position;
         Vector3 targetPos = target.transform.position;
+        targetPosition = targetPos;
         Vector3 toTarget = (targetPos - pos);
 
         // 1) 앞으로 이동
