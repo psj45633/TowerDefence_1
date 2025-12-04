@@ -87,28 +87,6 @@ public class TileAgentAStar2D : MonoBehaviour
             idx++;
             return;
         }
-        //if (!goal || idx < 0 || idx >= path.Count) { rb.linearVelocity = Vector2.zero; return; }
-
-        //var nextCell = path[idx];
-        //var nextCenter = grid.CellCenterWorld(nextCell);
-
-        //Vector3 pos = transform.position;
-        //Vector3 to = nextCenter - pos;
-        //float dist = to.magnitude;
-        //float step = speed * Time.fixedDeltaTime;
-
-        ////  이동하기 전에: step 범위(±여유)면 바로 스냅 + 다음 노드
-        //if (dist <= Mathf.Max(arriveEps, step * 1.1f))
-        //{
-        //    rb.MovePosition(nextCenter);
-        //    rb.linearVelocity = Vector2.zero;
-        //    idx++;
-        //    return;
-        //}
-
-        //// 그 외에는 한 프레임만 전진
-        //Vector3 newPos = pos + to.normalized * step;
-        //rb.MovePosition(newPos);
     }
 
     public void Repath()
@@ -122,7 +100,7 @@ public class TileAgentAStar2D : MonoBehaviour
             if (allowDiagonal) CompressPath8(path);
             idx = (path.Count >= 2 && path[0] == s) ? 1 : 0;
         }
-        else { idx = -1; rb.linearVelocity = Vector2.zero; }
+        else { idx = -1; rb.linearVelocity = Vector2.zero;}
     }
 
     void CompressPath8(List<Vector2Int> p)
@@ -218,7 +196,7 @@ public class TileAgentAStar2D : MonoBehaviour
         void Down(int i) { for (; ; ) { int s = i, l = L(i), r = R(i); if (l < h.Count && h[l].f < h[s].f) s = l; if (r < h.Count && h[r].f < h[s].f) s = r; if (s == i) break; (h[i], h[s]) = (h[s], h[i]); i = s; } }
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         if (!grid || path == null) return;
         if (path.Count < 2) return;
@@ -227,6 +205,4 @@ public class TileAgentAStar2D : MonoBehaviour
         for (int i = 0; i < path.Count - 1; i++)
             Gizmos.DrawLine(grid.CellCenterWorld(path[i]), grid.CellCenterWorld(path[i + 1]));
     }
-
-
 }

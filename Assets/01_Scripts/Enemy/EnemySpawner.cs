@@ -84,13 +84,13 @@ public class EnemySpawner : MonoBehaviour
 
     public void StartWave()
     {
+        TileAgentAStar2D.RequestRepathAll();
+
         spawnedEnemy = 0;
         timer = 0f;
         currentStage++;
         stageTxt.text = $"{currentStage}";
         Debug.Log(currentStage);
         waveActive = true;
-
-        TileAgentAStar2D.RequestRepathAll();
     }
 }

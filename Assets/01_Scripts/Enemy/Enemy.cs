@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using UnityEngine.AI;
 
 public enum EnemyOutcome { Died, Escaped }
 
@@ -25,7 +24,6 @@ public class Enemy : MonoBehaviour
         var sr = GetComponentInChildren<SpriteRenderer>();
         sr.color = data.tintColor;
         sr.sprite = data.sprite;
-        if (!enemyStats) enemyStats = GetComponent<EnemyStats>();
 
         enemyStats.OnDied -= OnKilled;
 
@@ -53,16 +51,6 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Target"))
-        {
-            OnEscaped();
-        }
-        else if (other.CompareTag("Attack"))
-        {
-            Tower tower = other.GetComponentInParent<Tower>();
-            int towerDamage = tower.curDamage;
-            enemyStats.TakeDamage(towerDamage);
-
-        }
+        if (other.CompareTag("Target")) OnEscaped();
     }
 }

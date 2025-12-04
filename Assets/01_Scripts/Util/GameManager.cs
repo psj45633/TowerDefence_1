@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager>
     public void Restart()
     {
         Debug.Log("Restart");
+        Time.timeScale = 1.0f;
         SceneManager.LoadScene("InGame");
     }
 

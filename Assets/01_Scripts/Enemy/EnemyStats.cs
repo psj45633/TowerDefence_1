@@ -19,9 +19,7 @@ public class EnemyStats : MonoBehaviour
         enemy = GetComponent<Enemy>();
         curHP = maxHp;
         MaxHP = maxHp;
-
         hpBar.gameObject.SetActive(false);
-
     }
 
     public void TakeDamage(int dmg)

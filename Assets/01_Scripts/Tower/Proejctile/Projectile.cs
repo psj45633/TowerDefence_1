@@ -21,7 +21,13 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy") || collision.CompareTag("Wall"))
+        if (collision.CompareTag("Enemy"))
+        {
+            int towerDamage = owner.curDamage;
+            collision.GetComponent<EnemyStats>().TakeDamage(towerDamage);
+            pool.ReturnToPool(gameObject);
+        }
+        else if (collision.CompareTag("Wall"))
         {
             pool.ReturnToPool(gameObject);
         }
@@ -29,10 +35,7 @@ public class Projectile : MonoBehaviour
 
     private void Update()
     {
-        if (!target.gameObject.activeInHierarchy)
-        {
-            DestroyObj();
-        }
+        if (!target.gameObject.activeInHierarchy) DestroyObj();
 
         SearchTarget();
     }

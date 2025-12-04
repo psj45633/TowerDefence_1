@@ -28,10 +28,9 @@ public class Tower : MonoBehaviour
     public int curDamage;
     public float curFireRate;
     public float curRange;
-    public Sprite curBodyImage;
-    public Sprite curHeadImage;
-    public GameObject curProjectile;
-    public AudioClip curAudioClip;
+    [SerializeField] private SpriteRenderer curBodyImage;
+    [SerializeField] private SpriteRenderer curHeadImage;
+    private AudioClip curAudioClip;
 
     
 
@@ -55,10 +54,16 @@ public class Tower : MonoBehaviour
         curDamage = towerData.levels[lv].damage;
         curFireRate = towerData.levels[lv].fireRate;
         curRange = towerData.levels[lv].range;
-        curBodyImage = towerData.levels[lv].bodyImage;
-        curHeadImage = towerData.levels[lv].headImage;
-        curProjectile = towerData.levels[lv].projectilePrefab;
+        curBodyImage.sprite = towerData.levels[lv].bodyImage;
+        curHeadImage.sprite = towerData.levels[lv].headImage;
+        
+        var pool = targeter.GetComponent<ObjectPool>();
+        pool.prefab = towerData.levels[lv].projectilePrefab;
+        
         curAudioClip = towerData.levels[lv].shootSfx;
+
+        var rangeMarker = GetComponentInChildren<TowerMenuButton>().rangeMarker;
+        rangeMarker.transform.localScale = Vector3.one*curRange*2;
 
         totalCost += costValue;
         curInfoTxt.text = $"Level : {currentLevelIndex+1}\nDamage : {curDamage}\nFire Rate : {curFireRate}\nRange : {curRange}";
@@ -72,9 +77,9 @@ public class Tower : MonoBehaviour
     {
         if (IsMaxLevel) return;
         currentLevelIndex++;
-        Init(currentLevelIndex);
         goldManager.TrySpend(costValue);
         ApplyLevel(currentLevelIndex);
+        Init(currentLevelIndex);
     }
 
     private void ApplyLevel(int levelIndex)
@@ -107,7 +112,7 @@ public class Tower : MonoBehaviour
 
     public void ShowInfo()
     {
-
+        
         var active = curInfoImage.gameObject.activeInHierarchy;
         curInfoImage.gameObject.SetActive(!active);
     }

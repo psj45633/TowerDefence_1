@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a01d21ff43ae1384ea0628c43707deee
+guid: b7d782c2992cdcc499cdf879c7bdfcc8
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8118214050485302933
-    second: RedBody_0
+      213: -1667351466021081837
+    second: WhiteHead3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: RedBody_0
+      name: WhiteHead3_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 3
-        width: 94
-        height: 94
+        x: 32
+        y: 18
+        width: 36
+        height: 50
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b690d3e455f465f80800000000000000
-      internalID: -8118214050485302933
+      spriteID: 31d2618fca06cd8e0800000000000000
+      internalID: -1667351466021081837
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      RedBody_0: -8118214050485302933
+      WhiteHead3_0: -1667351466021081837
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
