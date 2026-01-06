@@ -2365,7 +2365,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 4770626226471802530, guid: b37860599edbb194788a66e42fc38557, type: 3}
-  cost: {fileID: 0}
 --- !u!1 &755246261
 GameObject:
   m_ObjectHideFlags: 0
@@ -6811,7 +6810,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 3355823287577141722, guid: 270fb972dd7173c40a5d4f64cd6c8b2d, type: 3}
-  cost: {fileID: 0}
 --- !u!1 &994391747
 GameObject:
   m_ObjectHideFlags: 0
@@ -7455,7 +7453,7 @@ MonoBehaviour:
   spawnPoint: {x: -6, y: 12, z: 0}
   grid: {fileID: 1741243645}
   goal: {fileID: 758760193}
-  spawnCount: 50
+  spawnCount: 30
   spawnInterval: 0.7
   currentStage: 0
   stageTxt: {fileID: 1679786176}
@@ -8619,7 +8617,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 0}
-  cost: {fileID: 0}
 --- !u!1 &1275886609
 GameObject:
   m_ObjectHideFlags: 0
@@ -10660,7 +10657,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 3355823287577141722, guid: 32dda532f01677443b60ea7299471946, type: 3}
-  cost: {fileID: 0}
 --- !u!1 &1908227132
 GameObject:
   m_ObjectHideFlags: 0
@@ -11480,7 +11476,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2051223324
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11521,7 +11517,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -1072291353500489328, guid: d97b5db106e4d78469e2b2aa20275808, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11595,8 +11591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a247c04bad41242a730b9b58a39573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
-  cost: {fileID: 0}
+  prefab: {fileID: 3355823287577141722, guid: c8a671267fdfbee41af8ecdcc714beb6, type: 3}
 --- !u!1 &2134740159
 GameObject:
   m_ObjectHideFlags: 0

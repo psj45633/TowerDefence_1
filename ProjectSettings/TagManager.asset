@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Attack
   - Tower
+  - BlueTower
   layers:
   - Default
   - TransparentFX

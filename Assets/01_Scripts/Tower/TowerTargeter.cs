@@ -39,6 +39,10 @@ public class TowerTargeter : MonoBehaviour
         timer = 0f;
 
         currentTarget = ScanAndPickNearest();
+        if (transform.CompareTag("BlueTower"))
+        {
+            
+        }
     }
 
     Enemy ScanAndPickNearest()
@@ -83,7 +87,35 @@ public class TowerTargeter : MonoBehaviour
         return nearest;
     }
 
+    public int ScanInRange(out Enemy[] buffer)
+    {
+        buffer = enemyBuf;
 
+        float range = tower.towerData.levels[tower.currentLevelIndex].range;
+        int count = Physics2D.OverlapCircle(transform.position, range, contactFilter, hits);
+
+        int enemyCount = 0;
+        for (int i = 0; i < count; i++)
+        {
+            var col = hits[i];
+            if (!col) continue;
+
+            if (col.TryGetComponent(out Enemy e) && e)
+            {
+                if (!e.gameObject.activeInHierarchy) continue;
+
+                // 안전하게 maxHits 초과 방지(추가 메서드 내부라 "기존 로직 수정" 아님)
+                if (enemyCount >= enemyBuf.Length) break;
+
+                enemyBuf[enemyCount++] = e;
+            }
+
+            // 다음 스캔 대비(선택)
+            hits[i] = null;
+        }
+
+        return enemyCount;
+    }
 
 
 }

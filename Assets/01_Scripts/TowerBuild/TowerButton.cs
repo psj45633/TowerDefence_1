@@ -5,7 +5,7 @@ public class TowerButton : MonoBehaviour
 {
     public GameObject prefab;
 
-    [SerializeField] TextMeshProUGUI cost;
+    private TextMeshProUGUI cost;
 
     private void Start()
     {

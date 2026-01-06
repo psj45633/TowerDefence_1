@@ -56,9 +56,13 @@ public class Tower : MonoBehaviour
         curRange = towerData.levels[lv].range;
         curBodyImage.sprite = towerData.levels[lv].bodyImage;
         curHeadImage.sprite = towerData.levels[lv].headImage;
+
+        if (!targeter.CompareTag("BlueTower"))
+        {
+            var pool = targeter.GetComponent<ObjectPool>();
+            pool.prefab = towerData.levels[lv].projectilePrefab;
+        }
         
-        var pool = targeter.GetComponent<ObjectPool>();
-        pool.prefab = towerData.levels[lv].projectilePrefab;
         
         curAudioClip = towerData.levels[lv].shootSfx;
 

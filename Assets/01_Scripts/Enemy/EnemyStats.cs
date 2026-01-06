@@ -41,7 +41,15 @@ public class EnemyStats : MonoBehaviour
         if (hpBar)
         {
             hpBar.fillAmount = hpPercentage;
-            hpBar.color = new Color(1f, hpPercentage, hpPercentage);
+            if(hpPercentage >= 0.5f)
+            {
+                hpBar.color = new Color((1-hpPercentage)*2f, 1f,0f);
+            }
+            else
+            {
+                hpBar.color = new Color(1f,hpPercentage*2f , 0f);
+            }
+            
         }
     }
 

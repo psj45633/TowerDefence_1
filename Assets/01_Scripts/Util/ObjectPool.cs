@@ -12,9 +12,12 @@ public class ObjectPool : MonoBehaviour
     {
         for (int i = 0; i < InitialSize; i++)
         {
-            GameObject obj = Instantiate(prefab, parent);
-            obj.SetActive(false);
-            pool.Enqueue(obj);
+            if(prefab && parent)
+            {
+                GameObject obj = Instantiate(prefab, parent);
+                obj.SetActive(false);
+                pool.Enqueue(obj);
+            }
         }
     }
 
