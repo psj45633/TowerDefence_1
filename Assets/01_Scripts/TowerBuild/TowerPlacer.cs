@@ -38,6 +38,9 @@ public class TowerPlacer : MonoBehaviour
     [SerializeField] private GoldManager goldManager;
     [SerializeField] private TxtHandler txtHandler;
 
+    public PathPreviewLine previewLine;
+    public EnemySpawner spawner;
+
     private void Awake()
     {
         startCell = buildableMap.WorldToCell((Vector3)startWorld);
@@ -113,6 +116,8 @@ public class TowerPlacer : MonoBehaviour
         // 기존: 타일 점유/스타트/엔드만 보던 로직
         bool canBuild = !occupied.Contains(cell) && !onBlockedCell;
 
+        
+
         // 프리뷰 범위가 덮는 셀을 가상 차단으로 가정하고 경로가 남아있는지 미리 검사
         if (grid != null && towerPrefab != null)
         {
@@ -132,6 +137,16 @@ public class TowerPlacer : MonoBehaviour
             {
                 // 콜라이더가 없으면 한 칸 정도로 가정
                 previewBounds = new Bounds(cellCenter, new Vector3(0.9f, 0.9f, 0f));
+            }
+
+            if (spawner != null && spawner.waveActive && previewLine != null)
+            {
+                // 셀 1 기준: 0.35~0.5 사이에서 튜닝
+                // "접선만"에 가까울수록 낮게(0.35), 좀 더 여유있게 막으려면 높게(0.45~0.5)
+                float threshold = 0.25f;
+
+                if (IsBoundsTouchingLine(previewBounds, previewLine, threshold))
+                    canBuild = false;
             }
 
             // 2) 그 bounds가 덮는 셀들을 수집
@@ -192,19 +207,50 @@ public class TowerPlacer : MonoBehaviour
             // 새로 놓은 타워 콜라이더가 덮는 모든 셀을 갱신
             if (grid && inst)
             {
+                //var cols = inst.GetComponentsInChildren<Collider2D>();
+                //if (cols != null && cols.Length > 0)
+                //{
+                //    var total = cols[0].bounds;
+                //    for (int i = 1; i < cols.Length; i++) total.Encapsulate(cols[i].bounds);
+                //    grid.RefreshCellsByBounds(total);  // 다셀 갱신
+                //}
+                //else
+                //{
+                //    grid.RefreshCellAtWorld(cellCenter); // (콜라이더가 한 칸이면 대안)
+                //}
+
+                //grid.ForceRepathAll(); // 모든 에이전트 즉시 리패스
+
+                //PathfinderAStar2D.RequestRepathAll();
+
                 var cols = inst.GetComponentsInChildren<Collider2D>();
+                Bounds total;
+
                 if (cols != null && cols.Length > 0)
                 {
-                    var total = cols[0].bounds;
+                    total = cols[0].bounds;
                     for (int i = 1; i < cols.Length; i++) total.Encapsulate(cols[i].bounds);
-                    grid.RefreshCellsByBounds(total);  // 다셀 갱신
                 }
                 else
                 {
-                    grid.RefreshCellAtWorld(cellCenter); // (콜라이더가 한 칸이면 대안)
+                    total = new Bounds(cellCenter, new Vector3(0.9f, 0.9f, 0f));
                 }
 
-                grid.ForceRepathAll(); // 모든 에이전트 즉시 리패스
+                grid.RefreshCellsByBounds(total, notify:false);
+                // 경로에 영향 있으면 그때만 갱신/리패스
+                bool affectsPath = false;
+                if (previewLine != null)
+                {
+                    float threshold = 0.25f; // 너가 쓰던 값
+                    affectsPath = IsBoundsTouchingLine(total, previewLine, threshold);
+                }
+                
+                if (affectsPath)
+                {
+                    
+                    PathfinderAStar2D.RequestRepathAll();
+                    
+                }
             }
 
             CleanupPreview();
@@ -287,5 +333,71 @@ public class TowerPlacer : MonoBehaviour
             }
             grid.ForceRepathAll();
         }
+    }
+
+    bool IsBoundsTouchingLine(Bounds b, PathPreviewLine pl, float threshold)
+    {
+        if (pl == null || pl.LineCount < 2) return false;
+
+        // ✅ threshold 만큼 사각형을 팽창(거리 <= threshold 영역)
+        // Bounds.Expand는 "전체 크기"를 늘리는 거라 2*threshold
+        Bounds expanded = b;
+        expanded.Expand(new Vector3(threshold * 2f, threshold * 2f, 0f));
+
+        Vector2 min = expanded.min;
+        Vector2 max = expanded.max;
+
+        for (int i = 0; i < pl.LineCount - 1; i++)
+        {
+            Vector2 a = pl.GetLinePos(i);
+            Vector2 c = pl.GetLinePos(i + 1);
+
+            if (SegmentIntersectsAABB(a, c, min, max))
+                return true;
+        }
+
+        return false;
+    }
+
+    // 2D 선분이 AABB(min~max)와 교차하는지 (Slab method)
+    bool SegmentIntersectsAABB(Vector2 p0, Vector2 p1, Vector2 min, Vector2 max)
+    {
+        Vector2 d = p1 - p0;
+        float tMin = 0f;
+        float tMax = 1f;
+
+        // X slab
+        if (Mathf.Abs(d.x) < 1e-8f)
+        {
+            if (p0.x < min.x || p0.x > max.x) return false;
+        }
+        else
+        {
+            float ood = 1f / d.x;
+            float t1 = (min.x - p0.x) * ood;
+            float t2 = (max.x - p0.x) * ood;
+            if (t1 > t2) (t1, t2) = (t2, t1);
+            tMin = Mathf.Max(tMin, t1);
+            tMax = Mathf.Min(tMax, t2);
+            if (tMin > tMax) return false;
+        }
+
+        // Y slab
+        if (Mathf.Abs(d.y) < 1e-8f)
+        {
+            if (p0.y < min.y || p0.y > max.y) return false;
+        }
+        else
+        {
+            float ood = 1f / d.y;
+            float t1 = (min.y - p0.y) * ood;
+            float t2 = (max.y - p0.y) * ood;
+            if (t1 > t2) (t1, t2) = (t2, t1);
+            tMin = Mathf.Max(tMin, t1);
+            tMax = Mathf.Min(tMax, t2);
+            if (tMin > tMax) return false;
+        }
+
+        return true;
     }
 }

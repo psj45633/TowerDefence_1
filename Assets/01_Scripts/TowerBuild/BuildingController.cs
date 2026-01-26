@@ -37,15 +37,18 @@ public class BuildingController : MonoBehaviour
         //    return;
         //}
 
-        Enemy[] enemies = spawner.GetComponentsInChildren<Enemy>();
-        foreach (Enemy enemy in enemies)
-        {
-            if (enemy.gameObject.activeInHierarchy || spawner.waveActive)
-            {
-                txtHandler.ActiveTxt(2);
-                return;
-            }
-        }
+
+        //웨이브중 타워건설 막음
+        //Enemy[] enemies = spawner.GetComponentsInChildren<Enemy>();
+        //foreach (Enemy enemy in enemies)
+        //{
+        //    if (enemy.gameObject.activeInHierarchy || spawner.waveActive)
+        //    {
+        //        txtHandler.ActiveTxt(2);
+        //        Debug.Log("웨이브중이라 안됨");
+        //        return;
+        //    }
+        //}
 
         var tower = buildButtons[index].GetComponent<TowerButton>().prefab;
         int towerCost = tower.CompareTag("Tower")

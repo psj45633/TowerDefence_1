@@ -60,7 +60,7 @@ public class PathGrid2D : MonoBehaviour
              ) * boxScale;
 
     // 단일 셀 갱신
-    public void RefreshCellAtWorld(Vector3 worldPos)
+    public void RefreshCellAtWorld(Vector3 worldPos, bool notify = true)
     {
         var c = WorldToCell(worldPos);
         if (!InBounds(c)) return;
@@ -72,11 +72,13 @@ public class PathGrid2D : MonoBehaviour
         //walkable[c.x, c.y] = (n == 0);
         bool empty = (Physics2D.OverlapBox(CellCenterWorld(c), box, 0f, blockMask) == null);
         walkable[c.x, c.y] = empty;
-        OnGridChanged?.Invoke();
+
+        //OnGridChanged?.Invoke();
+        if(notify) OnGridChanged.Invoke();
     }
 
     // 콜라이더 범위에 걸친 여러 셀 한 번에 갱신
-    public void RefreshCellsByBounds(Bounds b)
+    public void RefreshCellsByBounds(Bounds b, bool notify = true)
     {
         float ex = cellSize.x * 0.05f, ey = cellSize.y * 0.05f;
         var min = new Vector3(b.min.x - ex, b.min.y - ey, 0f);
@@ -97,7 +99,8 @@ public class PathGrid2D : MonoBehaviour
                 walkable[c.x, c.y] = empty;
             }
 
-        OnGridChanged?.Invoke();
+        //OnGridChanged?.Invoke();
+        if (notify) OnGridChanged.Invoke();
     }
 
     // 전체 리패스 신호만 쏘고 싶을 때

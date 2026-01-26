@@ -13,6 +13,7 @@ public class EnemySpawner : MonoBehaviour
     public Transform goal;
 
     [Header("Wave Setting")]
+    [SerializeField] private PathfinderAStar2D pathfinder;
     [SerializeField] private int spawnCount = 30;
     [SerializeField] private float spawnInterval = 1f;
     [SerializeField] private int currentStage = 0;
@@ -23,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
     private float timer;
     private int spawnedEnemy;
     public bool waveActive = false;
-    
+
 
     private void Awake()
     {
@@ -35,7 +36,13 @@ public class EnemySpawner : MonoBehaviour
         {
             Debug.LogError("stageEnemies가 비어있음.");
         }
+
+        if (!pathfinder)
+        {
+            pathfinder = GetComponent<PathfinderAStar2D>();
+        }
     }
+
 
     private void Update()
     {
@@ -75,16 +82,16 @@ public class EnemySpawner : MonoBehaviour
         enemy.SetPool(enemyPool);
         enemy.Init(data);
 
-        var agent = go.GetComponent<TileAgentAStar2D>();
+        var agent = go.GetComponent<EnemyPath>();
         if (agent && grid && goal)
-            agent.Init(grid, goal);
+            agent.Init(pathfinder);
 
         spawnedEnemy++;
     }
 
     public void StartWave()
     {
-        TileAgentAStar2D.RequestRepathAll();
+        PathfinderAStar2D.RequestRepathAll();
 
         spawnedEnemy = 0;
         timer = 0f;
