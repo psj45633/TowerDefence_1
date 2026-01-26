@@ -20,6 +20,10 @@ public class TileAgentAStar2D : MonoBehaviour
     public bool allowDiagonal = true;
     public bool cornerCutBlock = true;
 
+    [Header("Path Visual")]
+    [SerializeField] private LineRenderer line;
+    [SerializeField] private float yOffset = 0f;
+
     Rigidbody2D rb;
     Enemy enemy;
     readonly List<Vector2Int> path = new();
@@ -35,6 +39,8 @@ public class TileAgentAStar2D : MonoBehaviour
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate; // 코너에서 매끈
+
+        if(!line) line = GetComponent<LineRenderer>();
     }
 
     public void Init(PathGrid2D g,Transform goal)
@@ -99,8 +105,15 @@ public class TileAgentAStar2D : MonoBehaviour
         {
             if (allowDiagonal) CompressPath8(path);
             idx = (path.Count >= 2 && path[0] == s) ? 1 : 0;
+
+            UpdateLIne();
         }
-        else { idx = -1; rb.linearVelocity = Vector2.zero;}
+        else
+        {
+            idx = -1; rb.linearVelocity = Vector2.zero;
+
+            ClearLine();
+        }
     }
 
     void CompressPath8(List<Vector2Int> p)
@@ -204,5 +217,25 @@ public class TileAgentAStar2D : MonoBehaviour
         Gizmos.color = Color.cyan;
         for (int i = 0; i < path.Count - 1; i++)
             Gizmos.DrawLine(grid.CellCenterWorld(path[i]), grid.CellCenterWorld(path[i + 1]));
+    }
+
+    private void UpdateLIne()
+    {
+        if (!line) return;
+
+        line.positionCount = path.Count;
+
+        for(int i = 0; i<path.Count ; i++)
+        {
+            var p = grid.CellCenterWorld(path[i]);
+            p.z += yOffset;
+            line.SetPosition(i,p);
+        }
+    }
+
+    private void ClearLine()
+    {
+        if(!line) return;
+        line.positionCount = 0;
     }
 }
